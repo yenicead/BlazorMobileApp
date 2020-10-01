@@ -1,0 +1,51 @@
+﻿@page "/"
+
+@code { 
+    private bool HasNetworkConnection { get; set; } = false;
+    private bool HasGPSConnection { get; set; } = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        while(!await CheckConnections())
+        {
+            await Task.Delay(3000);
+        }
+    }
+
+    async Task<bool> CheckConnections()
+    {
+        if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+        {
+            HasNetworkConnection = true;
+        }
+
+        try
+        {
+            var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+            var location = await Geolocation.GetLocationAsync(request);
+
+            if (location != null)
+            {
+                HasGPSConnection = true;
+            }
+        }
+        catch(Exception exception)
+        {
+            // TODO: Log this exception.
+            HasGPSConnection = false;
+        }
+
+        if (!HasNetworkConnection || !HasGPSConnection)
+        {
+            await Application.Current.MainPage.DisplayAlert("Information",
+                "In order to use the application, " +
+                "your device has to connect internet and your GSP should be open.",
+                "Refresh?");
+
+            return false;
+        }
+
+        return true;
+    }
+}
