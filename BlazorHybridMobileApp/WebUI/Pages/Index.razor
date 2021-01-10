@@ -1,16 +1,18 @@
 ﻿@page "/"
 
-@code { 
+@code {
     private bool HasNetworkConnection { get; set; } = false;
     private bool HasGPSConnection { get; set; } = false;
 
 
     protected override async Task OnInitializedAsync()
     {
-        while(!await CheckConnections())
+        while (!await CheckConnections())
         {
             await Task.Delay(3000);
         }
+
+        NavigationManager.NavigateTo("userinformation");
     }
 
     async Task<bool> CheckConnections()
@@ -30,9 +32,9 @@
                 HasGPSConnection = true;
             }
         }
-        catch(Exception exception)
+        catch (Exception exception)
         {
-            // TODO: Log this exception.
+            // TODO<Adem>: Log this exception message.
             HasGPSConnection = false;
         }
 

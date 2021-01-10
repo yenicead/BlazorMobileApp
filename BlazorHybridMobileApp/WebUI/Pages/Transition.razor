@@ -1,0 +1,21 @@
+﻿@page "/transition/{usernickname}" 
+
+<div class="transitionStart">
+    <button class="btn btn-primary" @onclick="StartChat"> 
+        Welcome @UserNickName, click here to find new friend 
+    </button>
+</div>
+
+@code {
+    [Parameter] public string UserNickName { get; set; }
+
+
+    private async Task StartChat()
+    {
+        // 1. Yine internet ve gsp kontrolu yapilarak gps verisi alinmalidir.
+        // 2. Kullanici adi ve koordinat bilgisi API'ye gonderilmelidir (GET). 
+        // 2.1. API bu bilgileri rabbitmq'ya eklemelidir.
+        // 2.2. API bu bilgilere en yakin 100m icerisindeki kullanicilari bulmali ve bize donmelidir. 
+        // 3. En onemli kisim, API'den GET yapilmali ve  
+    }
+}
