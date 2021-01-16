@@ -9,13 +9,17 @@
 @code {
     [Parameter] public string UserNickName { get; set; }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        // 1. İnternet ve GSP kontrolu yapilacak, bu kontroller tamam ise gps verisi alinarak API'ye POST edilmeli.
+        GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium);
+        Location location = await Geolocation.GetLocationAsync(request);
+    }
 
     private async Task StartChat()
     {
-        // 1. Yine internet ve gsp kontrolu yapilarak gps verisi alinmalidir.
-        // 2. Kullanici adi ve koordinat bilgisi API'ye gonderilmelidir (GET). 
-        // 2.1. API bu bilgileri rabbitmq'ya eklemelidir.
-        // 2.2. API bu bilgilere en yakin 100m icerisindeki kullanicilari bulmali ve bize donmelidir. 
-        // 3. En onemli kisim, API'den GET yapilmali ve  
+        // 2. Kullanici Start butonuna bastigi zaman asagidaki adimlar sirayla gerceklesecek.
+        // 2.1. API'ye kullanici bilgileri ile GET istegi gonderilerek, bu kullaniciya 100m icerisindeki en yakin kullanicilar bulunmali ve dondurulmelidir. 
+        // 2.2. Diger sayfaya bu bilgiler gondilmeli ve sayfa acilmalidir. 
     }
 }
