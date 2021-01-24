@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HaversineDistanceCalculator;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedisAPI.Redis;
@@ -17,11 +18,13 @@ namespace RedisAPI.Controllers
     public class RedisController : ControllerBase
     {
         private readonly IRedisConnection _redisConnection;
+        private readonly IDistanceCalculator _distanceCalculator;
         private readonly ILogger<RedisController> _logger;
 
-        public RedisController(IRedisConnection redisConnection, ILogger<RedisController> logger)
+        public RedisController(IRedisConnection redisConnection, IDistanceCalculator distanceCalculator, ILogger<RedisController> logger)
         {
             _redisConnection = redisConnection ?? throw new ArgumentNullException(nameof(redisConnection));
+            _distanceCalculator = distanceCalculator ?? throw new ArgumentNullException(nameof(distanceCalculator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -34,15 +37,15 @@ namespace RedisAPI.Controllers
             return iserUserAdded;
         }
 
-
         [HttpGet]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IEnumerable<UserGpsInformation>> GetClosestUsersAsync([FromQuery] UserGpsInformation userGpsInformation)
+        public async Task<Dictionary<string, double>> GetClosestUsersAsync([FromQuery] UserGpsInformation userGpsInformation)
         {
             IEnumerable<UserGpsInformation> userGpsInformations = await _redisConnection.GetAllAsync();
             userGpsInformations = userGpsInformations.Where(x => !String.Equals(x.UserNickname, userGpsInformation.UserNickname));
-            return userGpsInformations;
+            Dictionary<string, double> closestUsers = _distanceCalculator.GetClosestUsers(userGpsInformation, userGpsInformations);
+            return closestUsers;
         }
     }
 }
