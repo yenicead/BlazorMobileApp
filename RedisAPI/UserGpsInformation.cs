@@ -1,5 +1,4 @@
-﻿
-namespace RedisAPI
+﻿namespace RedisAPI
 {
     public class UserGpsInformation
     {

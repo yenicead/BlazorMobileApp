@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HaversineDistanceCalculator;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedisAPI.Redis;
@@ -17,11 +18,13 @@ namespace RedisAPI.Controllers
     public class RedisController : ControllerBase
     {
         private readonly IRedisConnection _redisConnection;
+        private readonly IDistanceCalculator _distanceCalculator;
         private readonly ILogger<RedisController> _logger;
 
-        public RedisController(IRedisConnection redisConnection, ILogger<RedisController> logger)
+        public RedisController(IRedisConnection redisConnection, IDistanceCalculator distanceCalculator, ILogger<RedisController> logger)
         {
             _redisConnection = redisConnection ?? throw new ArgumentNullException(nameof(redisConnection));
+            _distanceCalculator = distanceCalculator ?? throw new ArgumentNullException(nameof(distanceCalculator));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -42,6 +45,11 @@ namespace RedisAPI.Controllers
         {
             IEnumerable<UserGpsInformation> userGpsInformations = await _redisConnection.GetAllAsync();
             userGpsInformations = userGpsInformations.Where(x => !String.Equals(x.UserNickname, userGpsInformation.UserNickname));
+            var first = userGpsInformations.First();
+            var second = userGpsInformations.Last();
+
+            var result = _distanceCalculator.Calculate(first.Latitude, first.Longitude, second.Latitude, second.Longitude);
+            var test = _distanceCalculator.Calculate(51.5007, 0.1246, 40.6892, 74.0445);
             return userGpsInformations;
         }
     }

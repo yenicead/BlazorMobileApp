@@ -1,17 +1,11 @@
+using HaversineDistanceCalculator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using RedisAPI.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RedisAPI
 {
@@ -35,6 +29,7 @@ namespace RedisAPI
             });
 
             services.AddScoped<IRedisConnection, RedisConnection>();
+            services.AddScoped<IDistanceCalculator, DistanceCalculator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
