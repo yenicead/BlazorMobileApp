@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorHybridMobileApp.Andro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorHybridMobileApp.iOS", "BlazorHybridMobileApp.iOS\BlazorHybridMobileApp.iOS.csproj", "{868A7C72-4D88-49C2-94CC-1529E9FC5FB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisAPI", "RedisAPI\RedisAPI.csproj", "{D5436277-8FCC-43EB-9264-4A52D1768F32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisAPI", "RedisAPI\RedisAPI.csproj", "{D5436277-8FCC-43EB-9264-4A52D1768F32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
