@@ -6,6 +6,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -25,6 +26,8 @@ namespace RedisAPI.Controllers
         }
 
         [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<bool> SaveUserInformationAsync(UserGpsInformation userGpsInformation)
         {
             bool iserUserAdded = await _redisConnection.AddAsync(userGpsInformation);
@@ -33,6 +36,8 @@ namespace RedisAPI.Controllers
 
 
         [HttpGet]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
         public async Task<IEnumerable<UserGpsInformation>> GetClosestUsersAsync([FromQuery] UserGpsInformation userGpsInformation)
         {
             IEnumerable<UserGpsInformation> userGpsInformations = await _redisConnection.GetAllAsync();
