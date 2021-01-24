@@ -1,0 +1,27 @@
+﻿@page "/userinformation" 
+
+<div id="userinformationNickname">
+    <h3>Enter your nickname to meet new people</h3>
+    <br />
+    <label for="fname">Your nickname:</label>
+    <input @bind="UserNickName" type="text" id="usernickname" name="usernickname" placeholder="enter your nickname...">
+    <br><br>
+    <button class="btn btn-primary" @onclick="SaveUserNickName"> Save </button>
+</div>
+
+@code {
+    public string UserNickName { get; set; }
+
+    private async Task SaveUserNickName()
+    {
+        if (String.IsNullOrEmpty(UserNickName) || UserNickName.Length < 4)
+        {
+            await Application.Current.MainPage.DisplayAlert("Information",
+                "Your nickname is invalid, please try new one.", "OK");
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"transition/{UserNickName}");
+        }
+    }
+}

@@ -1,0 +1,36 @@
+﻿@page "/transition/{usernickname}"
+@using System.Net.Http
+@inject HttpClient Http
+
+<div class="transitionStart">
+    <button class="btn btn-primary" @onclick="StartChat">
+        Welcome @UserNickName, click here to find new friend
+    </button>
+</div>
+
+@code {
+    [Parameter] public string UserNickName { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // 1. İnternet ve GSP kontrolu yapilacak, bu kontroller tamam ise gps verisi alinarak API'ye POST edilmeli.
+        GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium);
+        Location location = await Geolocation.GetLocationAsync(request);
+
+        try
+        {
+            var result = await Http.GetAsync("Redis/TestGetMethod");
+        }
+        catch (Exception exception)
+        {
+            throw new ArgumentException($"An exception occured, exception: { exception }");
+        }
+    }
+
+    private async Task StartChat()
+    {
+        // 2. Kullanici Start butonuna bastigi zaman asagidaki adimlar sirayla gerceklesecek.
+        // 2.1. API'ye kullanici bilgileri ile GET istegi gonderilerek, bu kullaniciya 100m icerisindeki en yakin kullanicilar bulunmali ve dondurulmelidir.
+        // 2.2. Diger sayfaya bu bilgiler gondilmeli ve sayfa acilmalidir.
+    }
+}

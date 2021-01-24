@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.MobileBlazorBindings;
@@ -18,7 +19,12 @@ namespace BlazorHybridMobileApp
                 .ConfigureServices((hostContext, services) =>
                 {
                     // Adds web-specific services such as NavigationManager
-                    services.AddBlazorHybrid();                 
+                    services.AddBlazorHybrid();
+                    services.AddScoped(sp =>  
+                       new HttpClient
+                       {
+                           BaseAddress = new Uri("https://localhost:44343/")
+                       });
                 })
                 .Build();
 

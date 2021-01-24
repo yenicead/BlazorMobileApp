@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="WebUI\wwwroot\css\custom.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
     <PackageReference Include="Microsoft.MobileBlazorBindings" Version="0.4.74-preview" />
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
