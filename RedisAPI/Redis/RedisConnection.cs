@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HaversineDistanceCalculator;
 using StackExchange.Redis;
 
 namespace RedisAPI.Redis
@@ -86,6 +87,7 @@ namespace RedisAPI.Redis
             }
         }
 
+        // TODO<Adem>: Think about clustering keys based on their latitude and longitude.
         public async Task<bool> AddAsync(UserGpsInformation userGpsInformation)
         {
             try

@@ -37,20 +37,15 @@ namespace RedisAPI.Controllers
             return iserUserAdded;
         }
 
-
         [HttpGet]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IEnumerable<UserGpsInformation>> GetClosestUsersAsync([FromQuery] UserGpsInformation userGpsInformation)
+        public async Task<Dictionary<string, double>> GetClosestUsersAsync([FromQuery] UserGpsInformation userGpsInformation)
         {
             IEnumerable<UserGpsInformation> userGpsInformations = await _redisConnection.GetAllAsync();
             userGpsInformations = userGpsInformations.Where(x => !String.Equals(x.UserNickname, userGpsInformation.UserNickname));
-            var first = userGpsInformations.First();
-            var second = userGpsInformations.Last();
-
-            var result = _distanceCalculator.Calculate(first.Latitude, first.Longitude, second.Latitude, second.Longitude);
-            var test = _distanceCalculator.Calculate(51.5007, 0.1246, 40.6892, 74.0445);
-            return userGpsInformations;
+            Dictionary<string, double> closestUsers = _distanceCalculator.GetClosestUsers(userGpsInformation, userGpsInformations);
+            return closestUsers;
         }
     }
 }

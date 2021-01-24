@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HaversineDistanceCalculator
 {
     public class DistanceCalculator : IDistanceCalculator
     {
+        // Necessary information about Haversine formula: https://en.wikipedia.org/wiki/Haversine_formula
         private const double Radius = 6371; // Earth radius = 6371 km.
 
         public double Calculate(double firstLatitude, double firstLongitude, double secondLatitude, double secondLongitude)
@@ -23,6 +25,25 @@ namespace HaversineDistanceCalculator
                             Math.Cos(secondLatitude)
                        )
                    );
+        }
+
+        public Dictionary<string, double> GetClosestUsers(UserGpsInformation userGpsInformation, IEnumerable<UserGpsInformation> userGpsInformations)
+        {
+            Dictionary<string, double> keyValuePairs = new Dictionary<string, double>();
+            foreach (UserGpsInformation otherUserCoordinates in userGpsInformations)
+            {
+                double distance = Calculate(userGpsInformation.Latitude, userGpsInformation.Longitude, otherUserCoordinates.Latitude, otherUserCoordinates.Longitude);
+                if (keyValuePairs.ContainsKey(otherUserCoordinates.UserNickname))
+                {
+                    keyValuePairs[otherUserCoordinates.UserNickname] = distance;
+                }
+                else
+                {
+                    keyValuePairs.Add(otherUserCoordinates.UserNickname, distance);
+                }
+            }
+
+            return keyValuePairs;
         }
     }
 }
