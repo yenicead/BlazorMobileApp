@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using RedisAPI.Redis;
+using RedisAPI.Services;
 
 namespace RedisAPI
 {
@@ -30,6 +31,7 @@ namespace RedisAPI
 
             services.AddScoped<IRedisConnection, RedisConnection>();
             services.AddScoped<IDistanceCalculator, DistanceCalculator>();
+            services.AddScoped<IRedisControllerService, RedisControllerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

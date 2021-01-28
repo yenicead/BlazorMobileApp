@@ -26,24 +26,5 @@ namespace HaversineDistanceCalculator
                        )
                    );
         }
-
-        public Dictionary<string, double> GetClosestUsers(UserGpsInformation userGpsInformation, IEnumerable<UserGpsInformation> userGpsInformations)
-        {
-            Dictionary<string, double> keyValuePairs = new Dictionary<string, double>();
-            foreach (UserGpsInformation otherUserCoordinates in userGpsInformations)
-            {
-                double distance = Calculate(userGpsInformation.Latitude, userGpsInformation.Longitude, otherUserCoordinates.Latitude, otherUserCoordinates.Longitude);
-                if (keyValuePairs.ContainsKey(otherUserCoordinates.UserNickname))
-                {
-                    keyValuePairs[otherUserCoordinates.UserNickname] = distance;
-                }
-                else
-                {
-                    keyValuePairs.Add(otherUserCoordinates.UserNickname, distance);
-                }
-            }
-
-            return keyValuePairs;
-        }
     }
 }
