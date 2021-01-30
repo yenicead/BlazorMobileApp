@@ -10,27 +10,50 @@
 
 @code {
     [Parameter] public string UserNickName { get; set; }
+    private UserGpsInformation userGpsInformation { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        // 1. İnternet ve GSP kontrolu yapilacak, bu kontroller tamam ise gps verisi alinarak API'ye POST edilmeli.
         GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Medium);
         Location location = await Geolocation.GetLocationAsync(request);
 
+        // TODO: Check for internet and GPS connection, if both provided then take location and send POST request to API.
+        userGpsInformation.UserNickname = UserNickName;
+        userGpsInformation.Latitude = location.Latitude;
+        userGpsInformation.Longitude = location.Longitude;
+        userGpsInformation.Altitude = location.Altitude;
+
         try
         {
-            var result = await Http.GetAsync("Redis/TestGetMethod");
+            HttpResponseMessage httpResponseMessage = await Http.PostAsJsonAsync("Redis/SaveUserInformationAsync", userGpsInformation);
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                // User information saved to Redis.
+            }
+            else
+            {
+                // User information is not saved to Redis.
+            }
         }
         catch (Exception exception)
         {
+            // TODO: Log this exception message.
             throw new ArgumentException($"An exception occured, exception: { exception }");
         }
     }
 
     private async Task StartChat()
     {
-        // 2. Kullanici Start butonuna bastigi zaman asagidaki adimlar sirayla gerceklesecek.
-        // 2.1. API'ye kullanici bilgileri ile GET istegi gonderilerek, bu kullaniciya 100m icerisindeki en yakin kullanicilar bulunmali ve dondurulmelidir.
-        // 2.2. Diger sayfaya bu bilgiler gondilmeli ve sayfa acilmalidir.
+        // 2. Processes when user click the start button.
+        // 2.1. Send GET request with user information, API should find other users with the range of 100 meter by default.
+        // 2.2. Send this informations to next page then open the next page.
+    }
+
+    internal class UserGpsInformation
+    {
+        public string UserNickname { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Altitude { get; set; }
     }
 }

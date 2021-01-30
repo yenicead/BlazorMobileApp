@@ -23,6 +23,7 @@ namespace RedisAPI.Controllers
         }
 
         [HttpPost]
+        [Route("SaveUserInformationAsync")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<bool> SaveUserInformationAsync(UserGpsInformation userGpsInformation)
@@ -31,6 +32,7 @@ namespace RedisAPI.Controllers
         }
 
         [HttpGet]
+        [Route("GetClosestUsersAsync")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<Dictionary<string, double>> GetClosestUsersAsync([FromQuery] UserGpsInformation userGpsInformation, int selectedDistance = 100)
